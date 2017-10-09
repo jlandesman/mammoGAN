@@ -4,6 +4,7 @@ mkdir data
 mkdir data/training
 mkdir data/test
 mkdir data/mias_mini
+chmod -R 777 data
 
 gcsfuse cbis-ddsm-calc-training-full-mammogram-images /home/jlandesman/data/training
 gcsfuse cbis-ddsm-calc-training-roi-and-cropped-images /home/jlandesman/data/trainnig
