@@ -1,7 +1,7 @@
 #!/bin/bash
 
-sudo apt-get install python-pip python-dev
-sudo -H pip install --upgrade pip
+sudo apt-get install python3-pip python3-dev
+sudo -H pip3 install --upgrade pip
 
 wget https://developer.nvidia.com/compute/cuda/8.0/Prod2/local_installers/cuda-repo-ubuntu1604-8-0-local-ga2_8.0.61-1_amd64-deb
 
