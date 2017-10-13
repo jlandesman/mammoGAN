@@ -26,6 +26,6 @@ gcsfuse cbis-ddsm-calc-test-roi-and-cropped-images data/test/calc_cropped
 gcsfuse cbis-ddsm-mass-test-roi-and-cropped-images data/test/mass_cropped
 gcsfuse cbis-ddsm-mass-test-full-mammogram-images data/test/mass_full
 
-gcsfuse mias-mini-tiff /home/jlandesman/data/mias_mini
+gcsfuse mias-mini-png data/mias_mini
 
 
