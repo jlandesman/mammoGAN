@@ -68,8 +68,8 @@ for name in mias_mini_testSel['ref_num']:
     if os.path.isfile(ipFile):
         os.system('cp ' + ipFile + ' ' +opFile)
         
-print "training files are in the drectory train" 
-print "test files are in the drectory test"
+print "training files are in the directory train" 
+print "test files are in the directory test"
 
 mias_mini_trainSel['severity'].to_csv("train_labels.csv",index=False)
 mias_mini_testSel['severity'].to_csv("test_labels.csv",index=False)
