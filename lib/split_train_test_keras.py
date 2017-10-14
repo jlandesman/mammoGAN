@@ -5,7 +5,7 @@ import pandas as pd
 import sys
 
 if len(sys.argv) != 4:
-    print "Enter in the format python split_train_test.py mias-mini <csv file> <png or tif>"
+    print ("Enter in the format python split_train_test.py mias-mini <csv file> <png or tif>")
     exit()
 
 IP_DIR = sys.argv[1]
@@ -59,8 +59,7 @@ for name in mias_mini_trainSel['ref_num']:
     #print name
 
     opFile = TRAIN_DIR + "/" + name +  '.' + FILE_TYPE
-    ipFile =  name + '.' + FILE_TYPE
-    
+    ipFile =  IP_DIR + '/' + name + '.' + FILE_TYPE
     if os.path.isfile(ipFile):
         os.system('cp ' + ipFile + ' ' +opFile)
         
@@ -68,16 +67,16 @@ for name in mias_mini_testSel['ref_num']:
     #print name
 
     opFile = TEST_DIR + "/" + name + '.' + FILE_TYPE
-    ipFile =  name + '.' + FILE_TYPE
+    ipFile = IP_DIR + '/' + name + '.' + FILE_TYPE
     
     if os.path.isfile(ipFile):
         os.system('cp ' + ipFile + ' ' +opFile)
         
-print "training files are in the directory train" 
-print "test files are in the directory test"
+print ("training files are in the directory ", TRAIN_DIR )
+print ("test files are in the directory ", TEST_DIR)
 
 mias_mini_trainSel['severity'].to_csv("train_labels.csv",index=False)
 mias_mini_testSel['severity'].to_csv("test_labels.csv",index=False)
-print
-print "Train labels in train_labels.csv"
-print "Test labels in test_labels.csv"
+print ()
+print ("Train labels in train_labels.csv")
+print ("Test labels in test_labels.csv")
