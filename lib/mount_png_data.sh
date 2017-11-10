@@ -17,5 +17,5 @@ gcsfuse --implicit-dirs cbis-ddsm-calc-full-mammogram-images data_png/calc_full
 gcsfuse --implicit-dirs cbis-ddsm-calc-roi-and-cropped-images data_png/calc_cropped
 gcsfuse --implicit-dirs cbis-ddsm-mass-roi-and-croppsed-images data_png/mass_cropped
 gcsfuse --implicit-dirs cbis-ddsm-mass-full-mammogram-images data_png/mass_full
-gcsfuse --implicit-dirs mias-mini-png data_png/mias_mini
+gcsfuse --implicit-dirs mias-mini data_png/mias_mini
 gcsfuse --implicit-dirs mias-mini-balanced data_png/mias-mini-balanced
