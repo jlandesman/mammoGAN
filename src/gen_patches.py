@@ -209,7 +209,6 @@ def save_patches(zipped_patches, label, save_file_name):
     
     ## Recall that zipped_patches = zip(original, roi), where each dim is [-1, 256, 256]
     for number, patch in enumerate(zipped_patches):
-        
         if patch[0].mean() == MASK_CUTOFF: ## If the mean of the image patch = 0, then its purely black and not helpful
             num_not_breast +=1
             continue ## Return to start of loop
@@ -227,56 +226,60 @@ def save_patches(zipped_patches, label, save_file_name):
         else: ## Not in the tumor
             save_path = '/home/jlandesman/data/patches/calcification/no_tumor'
 
-        file_name = save_file_name + "_" + str(number) + ".png"
+        file_name = save_file_name + "_" + str(number)+ ".png"
         
-        try:
-            ###############
-            # Save Original
-            ###############
-            if patch[0].sum() > 0:
-                cv2.imwrite(os.path.join(save_path, file_name))
-                num_original += 1
-            
-            ##############
-            # Rotate
-            ##############
-            rotation_angle = np.random.randint(low = 0, high = MAX_ROTATE)
-            im = rotate_image(patch[0], rotation_angle)
+        #try:
+        ###############
+        # Save Original
+        ###############
+        if patch[0].sum() > 0:
+            #np.save(os.path.join(save_path, file_name), patch[0])
+            cv2.imwrite(os.path.join(save_path, file_name), patch[0])
+            num_original += 1
 
-            if im.sum() > 0:
-                file_name = save_file_name + "_" + "FLIP_" + str(number) + ".png"             
-                cv2.imwrite(save_file_name, im)
-                num_rotate += 1
-            
-            ##############
-            # Flip
-            ##############
-            im = np.fliplr(patch[0])
+        ##############
+        # Rotate
+        ##############
+        rotation_angle = np.random.randint(low = 0, high = MAX_ROTATE)
+        im = rotate_image(patch[0], rotation_angle)
 
-            if im.sum() > 0:
-                file_name = save_file_name + "_" + "FLIP_" + str(number) + ".png"             
-                cv2.imwrite(save_file_name, im)
-                num_flip += 1
+        if im.sum() > 0:
+            file_name = save_file_name + "_" + "FLIP_" + str(number) + ".png"             
+            #np.save(file_name, im)
+            cv2.imwrite(os.path.join(save_path, file_name), im)
+            num_rotate += 1
 
-            ##############
-            # Resize
-            ##############
-            resize_min, resize_max = get_resize_max_min(mammogram, 'CALC')
+        ##############
+        # Flip
+        ##############
+        im = np.fliplr(patch[0])
 
-            dim_0 = np.random.uniform(low = resize_min, high = resize_max)
-            dim_1 = np.random.uniform(low = resize_min, high = resize_max)
+        if im.sum() > 0:
+            file_name = save_file_name + "_" + "FLIP_" + str(number) + ".png"             
+            #np.save(file_name, im)
+            cv2.imwrite(os.path.join(save_path, file_name), im)
+            num_flip += 1
 
-            resize_dims = np.round([dim_0*mammogram.shape[0], dim_1*mammogram.shape[1]])
+        ##############
+        # Resize
+        ##############
+        resize_min, resize_max = get_resize_max_min(mammogram, 'CALC')
+
+        dim_0 = np.random.uniform(low = resize_min, high = resize_max)
+        dim_1 = np.random.uniform(low = resize_min, high = resize_max)
+
+        resize_dims = np.round([dim_0*mammogram.shape[0], dim_1*mammogram.shape[1]])
+
+        im = (resize(patch[0], resize_dims))
+
+        if im.sum() > 0:
+            file_name = save_file_name + "_" + "RESIZE" + str(number) + ".png"             
+            #np.save(file_name, im)
+            cv2.imwrite(os.path.join(save_path, file_name), im)
+            num_resize += 1
             
-            im = (resize(patch[0], resize_dims))
-            
-            if im.sum() > 0:
-                file_name = save_file_name + "_" + "RESIZE" + str(number) + ".png"             
-                cv2.imwrite(save_file_name, im)
-                num_resize += 1
-            
-        except:
-            errors.append(file_name)
+#        except:
+#            errors.append(file_name)
     print ('Original: {}, Rotate: {}, Flip: {}, Resize: {}, Not Breast: {}'.format(num_original, num_rotate, num_flip, num_resize, num_not_breast))
     print (len(errors))
     
