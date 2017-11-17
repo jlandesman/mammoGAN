@@ -226,16 +226,16 @@ def save_patches(zipped_patches, label, save_file_name):
         else: ## Not in the tumor
             save_path = '/home/jlandesman/data/patches/calcification/no_tumor'
 
-        file_name = save_file_name + "_" + str(number)+ ".png"
+        file_name = save_file_name + "_" + str(number) #+ ".png"
         
         #try:
         ###############
         # Save Original
         ###############
-        if patch[0].mean() < 255:
-            np.save(os.path.join(save_path, file_name), patch[0])
-            #cv2.imwrite(os.path.join(save_path, file_name), patch[0], [cv2.IMWRITE_PNG_COMPRESSION, 0])
-            num_original += 1
+        
+        np.save(os.path.join(save_path, file_name), patch[0])
+        #cv2.imwrite(os.path.join(save_path, file_name), patch[0], [cv2.IMWRITE_PNG_COMPRESSION, 0])
+        num_original += 1
 
         ##############
         # Rotate
@@ -243,40 +243,39 @@ def save_patches(zipped_patches, label, save_file_name):
         rotation_angle = np.random.randint(low = 0, high = MAX_ROTATE)
         im = rotate_image(patch[0], rotation_angle)
 
-        if im.mean() < 255:
-            file_name = save_file_name + "_" + "FLIP_" + str(number) + ".png"             
-            np.save(os.path.join(save_path, file_name), im)
-            #cv2.imwrite(os.path.join(save_path, file_name), im, [cv2.IMWRITE_PNG_COMPRESSION, 0])
-            num_rotate += 1
+        file_name = save_file_name + "_" + "ROTATE_" + str(number)# + "
+                     
+        np.save(os.path.join(save_path, file_name), im)
+        #cv2.imwrite(os.path.join(save_path, file_name), im, [cv2.IMWRITE_PNG_COMPRESSION, 0])
+        num_rotate += 1
 
         ##############
         # Flip
         ##############
         im = np.fliplr(patch[0])
 
-        if im.mean() < 255:
-            file_name = save_file_name + "_" + "FLIP_" + str(number) + ".png"             
-            np.save(os.path.join(save_path, file_name), im)
-            #cv2.imwrite(os.path.join(save_path, file_name), im, [cv2.IMWRITE_PNG_COMPRESSION, 0])
-            num_flip += 1
+        file_name = save_file_name + "_" + "FLIP_" + str(number)# + ".png"             
+        np.save(os.path.join(save_path, file_name), im)
+        #cv2.imwrite(os.path.join(save_path, file_name), im, [cv2.IMWRITE_PNG_COMPRESSION, 0])
+        num_flip += 1
 
-        ##############
-        # Resize
-        ##############
-        resize_min, resize_max = get_resize_max_min(mammogram, 'CALC')
+#         ##############
+#         # Resize
+#         ##############
+#         resize_min, resize_max = get_resize_max_min(mammogram, 'CALC')
 
-        dim_0 = np.random.uniform(low = resize_min, high = resize_max)
-        dim_1 = np.random.uniform(low = resize_min, high = resize_max)
+#         dim_0 = np.random.uniform(low = resize_min, high = resize_max)
+#         dim_1 = np.random.uniform(low = resize_min, high = resize_max)
 
-        resize_dims = np.round([dim_0*mammogram.shape[0], dim_1*mammogram.shape[1]])
+#         resize_dims = np.round([dim_0*mammogram.shape[0], dim_1*mammogram.shape[1]])
 
-        im = (resize(patch[0], resize_dims))
+#         im = (resize(patch[0], resize_dims))
 
-        if im.mean() < 255:
-            file_name = save_file_name + "_" + "RESIZE_" + str(number) + ".png"             
-            np.save(os.path.join(save_path, file_name), im)
-            #cv2.imwrite(os.path.join(save_path, file_name), im, [cv2.IMWRITE_PNG_COMPRESSION, 0])
-            num_resize += 1
+#         if im.mean() < 255:
+#             file_name = save_file_name + "_" + "RESIZE_" + str(number) + ".png"             
+#             np.save(os.path.join(save_path, file_name), im)
+#             #cv2.imwrite(os.path.join(save_path, file_name), im, [cv2.IMWRITE_PNG_COMPRESSION, 0])
+#             num_resize += 1
             
 #        except:
 #            errors.append(file_name)
@@ -292,8 +291,8 @@ def save_patches(zipped_patches, label, save_file_name):
 ## Get dictionary of {mammogram_file_name: (ROI_file, label)}
 file_list = get_mask_list()
 
-for mammogram_img in list(file_list.keys()):
-    print("Image name: {}, Number of ROIS: {} ".format(mammogram_img, len(file_list[mammogram_img])))
+for img_num, mammogram_img in enumerate(sorted(list(file_list.keys()))):
+    print("Image num: {}, Image name: {}, Number of ROIS: {} ".format(img_num, mammogram_img, len(file_list[mammogram_img])))
 
     
     ## Get images as np array
