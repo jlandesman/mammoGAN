@@ -225,39 +225,40 @@ def save_patches(zipped_patches, label, save_file_name):
 
         else: ## Not in the tumor
             save_path = '/home/jlandesman/data/patches/calcification/no_tumor'
+            if np.random.randn() < 0.9: ## Only save 10% to have a balanced dataset. 
+                save_path = None
 
         file_name = save_file_name + "_" + str(number) #+ ".png"
         
-        #try:
-        ###############
-        # Save Original
-        ###############
-        
-        np.save(os.path.join(save_path, file_name), patch[0])
-        #cv2.imwrite(os.path.join(save_path, file_name), patch[0], [cv2.IMWRITE_PNG_COMPRESSION, 0])
-        num_original += 1
+        try:
+            ###############
+            # Save Original
+            ###############
+            np.save(os.path.join(save_path, file_name), patch[0])
+            #cv2.imwrite(os.path.join(save_path, file_name), patch[0], [cv2.IMWRITE_PNG_COMPRESSION, 0])
+            num_original += 1
 
-        ##############
-        # Rotate
-        ##############
-        rotation_angle = np.random.randint(low = 0, high = MAX_ROTATE)
-        im = rotate_image(patch[0], rotation_angle)
+            ##############
+            # Rotate
+            ##############
+            rotation_angle = np.random.randint(low = 0, high = MAX_ROTATE)
+            im = rotate_image(patch[0], rotation_angle)
 
-        file_name = save_file_name + "_" + "ROTATE_" + str(number)# + "
-                     
-        np.save(os.path.join(save_path, file_name), im)
-        #cv2.imwrite(os.path.join(save_path, file_name), im, [cv2.IMWRITE_PNG_COMPRESSION, 0])
-        num_rotate += 1
+            file_name = save_file_name + "_" + "ROTATE_" + str(number)# + "
 
-        ##############
-        # Flip
-        ##############
-        im = np.fliplr(patch[0])
+            np.save(os.path.join(save_path, file_name), im)
+            #cv2.imwrite(os.path.join(save_path, file_name), im, [cv2.IMWRITE_PNG_COMPRESSION, 0])
+            num_rotate += 1
 
-        file_name = save_file_name + "_" + "FLIP_" + str(number)# + ".png"             
-        np.save(os.path.join(save_path, file_name), im)
-        #cv2.imwrite(os.path.join(save_path, file_name), im, [cv2.IMWRITE_PNG_COMPRESSION, 0])
-        num_flip += 1
+            ##############
+            # Flip
+            ##############
+            im = np.fliplr(patch[0])
+
+            file_name = save_file_name + "_" + "FLIP_" + str(number)# + ".png"             
+            np.save(os.path.join(save_path, file_name), im)
+            #cv2.imwrite(os.path.join(save_path, file_name), im, [cv2.IMWRITE_PNG_COMPRESSION, 0])
+            num_flip += 1
 
 #         ##############
 #         # Resize
@@ -277,8 +278,9 @@ def save_patches(zipped_patches, label, save_file_name):
 #             #cv2.imwrite(os.path.join(save_path, file_name), im, [cv2.IMWRITE_PNG_COMPRESSION, 0])
 #             num_resize += 1
             
-#        except:
+        except:
 #            errors.append(file_name)
+             pass
     print ('Original: {}, Rotate: {}, Flip: {}, Resize: {}, Not Breast: {}'.format(num_original, num_rotate, num_flip, num_resize, num_not_breast))
     print (len(errors))
     
