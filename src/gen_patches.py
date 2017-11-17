@@ -32,7 +32,7 @@ PATH_TO_ROI_CSV_LABELS = '/home/jlandesman/data/cbis-ddsm/calc_case_description_
 CALC_TARGET_RESIZE = np.array([2750,1500])
 MASS_TARGET_RESIZE = np.array([1100, 600])
 MAX_ROTATE = 30 ## degrees
-STEP_SIZE = 80 ## Stride for getting windows
+STEP_SIZE = 100 ## Stride for getting windows
 
 MASK_CUTOFF = 0 ## If a patch has an average mask value of 0 discard it as it is not in the breast
 ROI_CUTOFF = 0 ## If an ROI has an average value of zero, label it "no_tumor" 
@@ -232,9 +232,9 @@ def save_patches(zipped_patches, label, save_file_name):
         ###############
         # Save Original
         ###############
-        if patch[0].sum() > 0:
-            #np.save(os.path.join(save_path, file_name), patch[0])
-            cv2.imwrite(os.path.join(save_path, file_name), patch[0])
+        if patch[0].mean() < 255:
+            np.save(os.path.join(save_path, file_name), patch[0])
+            #cv2.imwrite(os.path.join(save_path, file_name), patch[0], [cv2.IMWRITE_PNG_COMPRESSION, 0])
             num_original += 1
 
         ##############
@@ -243,10 +243,10 @@ def save_patches(zipped_patches, label, save_file_name):
         rotation_angle = np.random.randint(low = 0, high = MAX_ROTATE)
         im = rotate_image(patch[0], rotation_angle)
 
-        if im.sum() > 0:
+        if im.mean() < 255:
             file_name = save_file_name + "_" + "FLIP_" + str(number) + ".png"             
-            #np.save(file_name, im)
-            cv2.imwrite(os.path.join(save_path, file_name), im)
+            np.save(os.path.join(save_path, file_name), im)
+            #cv2.imwrite(os.path.join(save_path, file_name), im, [cv2.IMWRITE_PNG_COMPRESSION, 0])
             num_rotate += 1
 
         ##############
@@ -254,10 +254,10 @@ def save_patches(zipped_patches, label, save_file_name):
         ##############
         im = np.fliplr(patch[0])
 
-        if im.sum() > 0:
+        if im.mean() < 255:
             file_name = save_file_name + "_" + "FLIP_" + str(number) + ".png"             
-            #np.save(file_name, im)
-            cv2.imwrite(os.path.join(save_path, file_name), im)
+            np.save(os.path.join(save_path, file_name), im)
+            #cv2.imwrite(os.path.join(save_path, file_name), im, [cv2.IMWRITE_PNG_COMPRESSION, 0])
             num_flip += 1
 
         ##############
@@ -272,10 +272,10 @@ def save_patches(zipped_patches, label, save_file_name):
 
         im = (resize(patch[0], resize_dims))
 
-        if im.sum() > 0:
-            file_name = save_file_name + "_" + "RESIZE" + str(number) + ".png"             
-            #np.save(file_name, im)
-            cv2.imwrite(os.path.join(save_path, file_name), im)
+        if im.mean() < 255:
+            file_name = save_file_name + "_" + "RESIZE_" + str(number) + ".png"             
+            np.save(os.path.join(save_path, file_name), im)
+            #cv2.imwrite(os.path.join(save_path, file_name), im, [cv2.IMWRITE_PNG_COMPRESSION, 0])
             num_resize += 1
             
 #        except:
@@ -307,7 +307,7 @@ for mammogram_img in list(file_list.keys()):
         ## Get label
         label = roi_img[1]
         data_for_saving = '\n' + 'Image Name: ', mammogram_img, 'ROI_name: ', roi_img, 'label: ', label
-        with open('logging_file.csv', 'a') as logging_file:
+        with open('/home/jlandesman/logging_file.csv', 'a') as logging_file:
             logging_file.write(str(data_for_saving))
         
         print('label = ', label)
