@@ -153,7 +153,6 @@ sess = tf.Session(config=tf.ConfigProto(log_device_placement=True))
 
 model = Sequential()
 model.add(ResNet50(include_top = False, 
-                   weights='imagenet', 
                    input_shape = (256, 256, 3), classes = NUM_CLASSES))
 
 ## Add in last 3 layers
